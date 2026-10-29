@@ -1,6 +1,7 @@
-﻿@page "/processos"
+﻿
+@page "/processos"
 @rendermode InteractiveServer
-@inject ProcessoDAO dao;
+@inject ProcessoDAO dao
 
 <PageTitle>Processos - Sistema de Controle de Processos</PageTitle>
 
@@ -8,6 +9,7 @@
     <div>
         <h2 class="fw-bold mb-1">Consulta de Processos</h2>
     </div>
+
     <div>
         <a href="/processos/cadastro" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i> Novo Processo
@@ -30,28 +32,38 @@
             </thead>
 
             <tbody>
-                
-                @foreach (var p in processos)
+                @if (processos is not null)
                 {
-                    <tr>
-                        <td>@p.Id</td>
-                        <td>@p.Numero</td>
-                        <td>@p.Interessado</td>
-                        <td class="text-truncate">@p.Assunto</td>
-                        <td>
-                            <i class="bi bi-clock"></i> @p.Situacao
-                        </td>
-                        <td class="text-end">
-                            <div class="btn-group btn-group-sm">
-                                <a href="#" class="btn btn-light border text-primary" title="Editar">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-light border text-danger" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach (var p in processos)
+                    {
+                        <tr>
+                            <td>@p.Id</td>
+                            <td>@p.Numero</td>
+                            <td>@p.Interessado</td>
+                            <td class="text-truncate">@p.Assunto</td>
+
+                            <td>
+                                <i class="bi bi-clock"></i>
+                                @p.Situacao
+                            </td>
+
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="@($"/processos/editar/{p.Id}")"
+                                       class="btn btn-light border text-primary"
+                                       title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <a href="@($"/processos/excluir/{p.Id}")"
+                                       class="btn btn-light border text-danger"
+                                       title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -59,7 +71,6 @@
 </div>
 
 @code {
-
     private List<Processo>? processos;
 
     protected override void OnInitialized()
@@ -71,5 +82,4 @@
     {
         processos = dao.Listar();
     }
-
 }
